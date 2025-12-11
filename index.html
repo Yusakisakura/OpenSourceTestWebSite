@@ -1,11 +1,520 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>计算机知识教程 · 静态网页</title>
+    <meta name="description" content="一站式计算机基础知识教程：硬件、操作系统、网络、编程、算法与数据结构、安全等。">
+    <style>
+        /* 全局重置与主题变量 */
+        :root {
+            --bg: #0f1220;
+            --panel: #171a2b;
+            --muted: #9aa3b2;
+            --text: #e7eaf3;
+            --accent: #6ea8fe;
+            --accent-2: #4cc9f0;
+            --ok: #8ce99a;
+            --warn: #ffd43b;
+            --danger: #ff6b6b;
+            --code-bg: #0b0e19;
+            --border: #252942;
+            --shadow: 0 10px 30px rgba(0,0,0,.35);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html, body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", Arial, "Apple Color Emoji","Noto Color Emoji", sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: radial-gradient(1200px 800px at 10% 0%, #152038 0%, var(--bg) 60%);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none
+        }
+
+            a:hover {
+                text-decoration: underline
+            }
+
+        /* 布局 */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: saturate(140%) blur(8px);
+            background: linear-gradient(0deg, rgba(15,18,32,.7), rgba(15,18,32,.6));
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            letter-spacing: .2px;
+        }
+
+        .logo-mark {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: radial-gradient(12px 12px at 30% 30%, var(--accent) 0%, var(--accent-2) 55%, #9448ff 100%);
+            box-shadow: 0 6px 16px rgba(110,168,254,.35), inset 0 0 10px rgba(255,255,255,.15);
+        }
+
+        nav {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+            nav a {
+                padding: 8px 10px;
+                border-radius: 8px;
+                color: var(--text);
+            }
+
+                nav a:hover {
+                    background: rgba(110,168,254,.12);
+                }
+
+        .container {
+            max-width: 1100px;
+            margin: 24px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 24px;
+        }
+
+        /* 侧边目录 */
+        aside {
+            position: sticky;
+            top: 64px;
+            background: linear-gradient(180deg, #161a2b 0%, #121527 100%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 16px;
+            height: max-content;
+        }
+
+        .toc-title {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 8px
+        }
+
+        .toc a {
+            display: block;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: var(--text);
+        }
+
+            .toc a:hover {
+                background: rgba(76,201,240,.12)
+            }
+
+        .toc .sub {
+            padding-left: 18px;
+            color: var(--muted)
+        }
+
+        /* 主要内容 */
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        section {
+            background: linear-gradient(180deg, #161a2b 0%, #121527 100%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+        }
+
+        h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tag {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .kbd {
+            display: inline-block;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,.02);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        /* 提示块 */
+        .callout {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            border-left: 4px solid var(--accent);
+            background: rgba(110,168,254,.08);
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin: 14px 0;
+        }
+
+            .callout.warn {
+                border-left-color: var(--warn);
+                background: rgba(255,212,59,.12)
+            }
+
+            .callout.ok {
+                border-left-color: var(--ok);
+                background: rgba(140,233,154,.12)
+            }
+
+            .callout .icon {
+                font-weight: 700;
+                width: 20px;
+                color: var(--accent)
+            }
+
+        /* 列表与代码 */
+        ul {
+            margin: 10px 0 0 0;
+            padding-left: 18px
+        }
+
+        li {
+            margin: 6px 0
+        }
+
+        code {
+            color: #bfe1ff;
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid var(--border)
+        }
+
+        pre {
+            margin: 12px 0;
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            overflow: auto;
+        }
+
+            pre code {
+                border: none;
+                padding: 0;
+                color: #d6eaff
+            }
+
+        /* 表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: left
+        }
+
+        th {
+            background: #19203a
+        }
+
+        tbody tr:hover {
+            background: #151a2f
+        }
+
+        /* 页脚 */
+        footer {
+            margin: 32px 0 40px;
+            text-align: center;
+            color: var(--muted)
+        }
+
+        /* 响应式 */
+        @media (max-width: 920px) {
+            .container {
+                grid-template-columns: 1fr
+            }
+
+            aside {
+                position: relative;
+                top: auto
+            }
+
+            nav {
+                display: none
+            }
+        }
+    </style>
 </head>
 <body>
 
+    <header>
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-mark" aria-hidden="true"></span>
+                <span>计算机知识教程</span>
+            </div>
+            <nav aria-label="快捷导航">
+                <a href="#intro">概览</a>
+                <a href="#hardware">硬件</a>
+                <a href="#os">操作系统</a>
+                <a href="#network">计算机网络</a>
+                <a href="#programming">编程基础</a>
+                <a href="#algo">算法与数据结构</a>
+                <a href="#security">安全基础</a>
+                <a href="#faq">常见问题</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside>
+            <div class="toc-title">目录</div>
+            <div class="toc">
+                <a href="#intro">1. 教程概览</a>
+                <a href="#hardware">2. 计算机硬件基础</a>
+                <a href="#os">3. 操作系统与文件系统</a>
+                <a href="#network">4. 计算机网络入门</a>
+                <a class="sub" href="#network-layer">4.1 网络分层模型</a>
+                <a class="sub" href="#network-tools">4.2 常用网络命令</a>
+                <a href="#programming">5. 编程基础与代码示例</a>
+                <a class="sub" href="#python">5.1 Python 示例</a>
+                <a class="sub" href="#cpp">5.2 C++ 示例</a>
+                <a href="#algo">6. 算法与数据结构</a>
+                <a href="#security">7. 安全与最佳实践</a>
+                <a href="#faq">8. 常见问题</a>
+            </div>
+        </aside>
+
+        <main>
+            <section id="intro" aria-labelledby="intro-title">
+                <h2 id="intro-title">教程概览 <span class="tag">面向初学者与进阶学习者</span></h2>
+                <p>这是一份面向零基础到进阶的计算机知识教程，包含硬件基础、操作系统、网络、编程、算法与数据结构、安全与实践等模块。内容强调“概念—例子—实践”的路径，帮助你建立系统化的知识框架。</p>
+                <div class="callout ok">
+                    <span class="icon">✓</span>
+                    <div>学习建议：先横向浏览，后纵向深入；每一章节后配合动手实践与自测。</div>
+                </div>
+            </section>
+
+            <section id="hardware" aria-labelledby="hardware-title">
+                <h2 id="hardware-title">计算机硬件基础 <span class="tag">CPU · 内存 · 存储 · 外设</span></h2>
+                <ul>
+                    <li><strong>CPU：</strong>负责指令执行与运算，核心指标包括主频、核心/线程数与缓存。</li>
+                    <li><strong>内存（RAM）：</strong>程序运行时的临时数据存放处，容量与频率影响并发与响应速度。</li>
+                    <li><strong>存储：</strong>固态硬盘（SSD）与机械硬盘（HDD），SSD更快更适合系统与软件安装。</li>
+                    <li><strong>主板与总线：</strong>连接与协调各部件的数据交换，影响可拓展性与稳定性。</li>
+                    <li><strong>外设：</strong>显卡、网卡、显示器、键鼠等，针对不同场景优化。</li>
+                </ul>
+                <table aria-label="存储介质对比">
+                    <thead>
+                        <tr><th>属性</th><th>SSD</th><th>HDD</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>速度</td><td>快</td><td>慢</td></tr>
+                        <tr><td>耐用性</td><td>较好（无机械部件）</td><td>较低（有机械部件）</td></tr>
+                        <tr><td>价格/容量</td><td>相对昂贵</td><td>更便宜</td></tr>
+                        <tr><td>适用场景</td><td>系统盘、常用软件</td><td>冷数据、归档</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="os" aria-labelledby="os-title">
+                <h2 id="os-title">操作系统与文件系统 <span class="tag">Windows · Linux · macOS</span></h2>
+                <ul>
+                    <li><strong>进程与线程：</strong>进程是资源分配单位，线程是调度单位，合理并发提升效率。</li>
+                    <li><strong>内存管理：</strong>分页与分段、虚拟内存、内核态与用户态。</li>
+                    <li><strong>文件系统：</strong>常见如 NTFS、ext4、APFS；目录、权限与链接是基础必修。</li>
+                    <li><strong>终端与命令：</strong>掌握基本命令能显著提升效率（如 <code>cd</code>、<code>ls</code>、<code>grep</code>、<code>chmod</code>）。</li>
+                </ul>
+                <pre><code># Linux 常用权限命令示例
+# 赋予脚本可执行权限
+chmod +x ./deploy.sh
+
+# 查看文件详细信息（含权限）
+ls -l
+
+# 递归搜索关键字
+grep -R "TODO" ./src
+</code></pre>
+                <div class="callout warn">
+                    <span class="icon">!</span>
+                    <div>谨慎操作权限与系统目录，错误的命令可能导致系统不可用或数据丢失。</div>
+                </div>
+            </section>
+
+            <section id="network" aria-labelledby="network-title">
+                <h2 id="network-title">计算机网络入门 <span class="tag">IP · DNS · HTTP · TLS</span></h2>
+                <p>网络让计算机互联并交换数据。从地址解析、路由转发到应用协议，每一层都承担清晰责任。掌握网络基础能帮助你排障、优化性能并设计可靠服务。</p>
+
+                <section id="network-layer" aria-labelledby="layer-title">
+                    <h3 id="layer-title">网络分层模型 <span class="tag">OSI 与 TCP/IP</span></h3>
+                    <ul>
+                        <li><strong>链路层：</strong>MAC 地址与帧传输。</li>
+                        <li><strong>网络层：</strong>IP 寻址与路由（如 IPv4/IPv6）。</li>
+                        <li><strong>传输层：</strong>TCP（可靠）与 UDP（低延迟）。</li>
+                        <li><strong>应用层：</strong>HTTP、DNS、SMTP 等。</li>
+                    </ul>
+                </section>
+
+                <section id="network-tools" aria-labelledby="tools-title">
+                    <h3 id="tools-title">常用网络命令 <span class="tag">排障利器</span></h3>
+                    <pre><code># 测试连通性与延迟
+ping example.com
+
+# 查看域名解析
+nslookup example.com
+
+# 路由跟踪（Windows 使用 tracert）
+traceroute example.com
+
+# 简单查看 HTTP 头
+curl -I https://example.com
+</code></pre>
+                </section>
+            </section>
+
+            <section id="programming" aria-labelledby="programming-title">
+                <h2 id="programming-title">编程基础与代码示例 <span class="tag">变量 · 控制流 · 函数 · I/O</span></h2>
+                <ul>
+                    <li><strong>变量与类型：</strong>标识数据与其形态（数值、字符串、布尔等）。</li>
+                    <li><strong>控制流：</strong>条件、循环、异常处理决定程序执行路径。</li>
+                    <li><strong>函数与模块：</strong>封装与复用，关注单一职责与清晰 API。</li>
+                    <li><strong>I/O：</strong>文件读写、网络请求与序列化。</li>
+                </ul>
+
+                <section id="python" aria-labelledby="python-title">
+                    <h3 id="python-title">Python 示例 <span class="tag">脚本与数据处理</span></h3>
+                    <pre><code>def fib(n: int) -&gt; list[int]:
+    """返回前 n 个斐波那契数列"""
+    seq = []
+    a, b = 0, 1
+    for _ in range(n):
+        seq.append(a)
+        a, b = b, a + b
+    return seq
+
+if __name__ == "__main__":
+    print(fib(10))
+</code></pre>
+                </section>
+
+                <section id="cpp" aria-labelledby="cpp-title">
+                    <h3 id="cpp-title">C++ 示例 <span class="tag">性能与类型安全</span></h3>
+                    <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+std::vector&lt;long long&gt; fib(size_t n) {
+    std::vector&lt;long long&gt; seq;
+    seq.reserve(n);
+    long long a = 0, b = 1;
+    for (size_t i = 0; i &lt; n; ++i) {
+        seq.push_back(a);
+        long long next = a + b;
+        a = b; b = next;
+    }
+    return seq;
+}
+
+int main() {
+    auto v = fib(10);
+    for (auto x : v) std::cout &lt;&lt; x &lt;&lt; " ";
+    return 0;
+}
+</code></pre>
+                </section>
+            </section>
+
+            <section id="algo" aria-labelledby="algo-title">
+                <h2 id="algo-title">算法与数据结构 <span class="tag">复杂度 · 栈队列 · 树图 · 排序搜索</span></h2>
+                <ul>
+                    <li><strong>时间/空间复杂度：</strong>用 <code>O( )</code> 衡量算法随输入规模增长的资源消耗。</li>
+                    <li><strong>数据结构：</strong>数组、链表、栈、队列、哈希、树与图是问题建模的基石。</li>
+                    <li><strong>经典算法：</strong>排序（快排、归并）、搜索（二分）、最短路径（Dijkstra）。</li>
+                </ul>
+                <pre><code># Python：二分查找
+def binary_search(nums, target):
+    lo, hi = 0, len(nums) - 1
+    while lo &lt;= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] &lt; target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1
+</code></pre>
+            </section>
+
+            <section id="security" aria-labelledby="security-title">
+                <h2 id="security-title">安全与最佳实践 <span class="tag">密码学 · 输入校验 · 最小权限</span></h2>
+                <ul>
+                    <li><strong>输入校验与过滤：</strong>防止注入与越权访问，白名单策略优先。</li>
+                    <li><strong>认证与授权：</strong>区分身份识别与权限分配，确保数据与操作边界。</li>
+                    <li><strong>加密与传输安全：</strong>使用 TLS 保障传输安全，敏感数据静态加密与密钥管理。</li>
+                    <li><strong>日志与审计：</strong>为定位问题与合规留痕，注意隐私与最小留存。</li>
+                </ul>
+                <div class="callout">
+                    <span class="icon">ℹ</span>
+                    <div>最小权限原则：账户、服务与进程仅授予完成任务所需的最低权限。</div>
+                </div>
+            </section>
+
+            <section id="faq" aria-labelledby="faq-title">
+                <h2 id="faq-title">常见问题 <span class="tag">入门与路径</span></h2>
+                <ul>
+                    <li><strong>如何开始：</strong>选一个语言（如 Python），配合实战小项目（命令行、爬虫或数据处理）。</li>
+                    <li><strong>如何进阶：</strong>补齐计算机网络与操作系统基础，练习数据结构与算法题。</li>
+                    <li><strong>如何排障：</strong>先复现实例，再分层定位；使用日志、监控与最小化示例快速缩小范围。</li>
+                    <li><strong>如何构建作品集：</strong>公开代码与文档，说明问题背景、方案选择、指标与改进空间。</li>
+                </ul>
+            </section>
+
+            <footer>
+                © 2025 计算机知识教程  Yusaki_Sakura with Microsoft Copilot | 内容仅用于学习参考
+            </footer>
+        </main>
+    </div>
 </body>
-</html>
